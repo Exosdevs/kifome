@@ -3,6 +3,9 @@ from django.db import models
 
 # Create your models here.
 
+
+ok
+
 ORD_ENTRADA = [
         ("A", "A - Primeiro Semestre"),
         ("B", "B - Segundo Semestre"),

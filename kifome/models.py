@@ -4,64 +4,46 @@ from django.db import models
 # Create your models here.
 
 
-ok
 
-ORD_ENTRADA = [
+
+class Turma(models.Model):
+    ORD_ENTRADA = [
         ("A", "A - Primeiro Semestre"),
         ("B", "B - Segundo Semestre"),
     ]
-
-class Turma(models.Model):
-    curso = models.CharField(blank=False, null=False, max_length=100)
+    curso = models.CharField(blank=False, null=False, max_length=255)
     ano = models.CharField(blank=False, null=False, max_length=4)
-    ordem = models.CharField(blank=False, null=False, max_length=2, choices=ORD_ENTRADA)
+    ordem = models.CharField(blank=False, null=False, max_length=1, choices=ORD_ENTRADA)
+    def __str__(self):
+        return self.curso
 
 
 class Aluno(models.Model):
-    nome = models.CharField(blank=False, null=False, max_length=256)
+    nome = models.CharField(blank=False, null=False, max_length=255)
     cpf = models.CharField(blank=False, null=False, unique=True, max_length=14)
+    senha = models.CharField(max_length=255)
     turma = models.ForeignKey(Turma, on_delete=models.CASCADE)
+    restricao = models.BooleanField(default=False)
+    def __str__(self):
+        return self.nome
 
 
 class Cardapio(models.Model):
     nome = models.CharField(blank=False, null=False, max_length=120)
     descricao = models.TextField(blank=False, null=False)
     data = models.DateField(blank=False, null=False, unique=True)
-
-
-
-class Turma(models.Model):
-    curso = models.CharField(max_length=255)
-    ano = models.CharField(max_length=4)
-    ordem = models.CharField(max_length=1)
-
-    def __str__(self):
-        return self.curso
-
-
-class Aluno(models.Model):
-    cpf = models.CharField(max_length=30)
-    nome = models.CharField(max_length=30)
-    turma = models.ForeignKey(Turma, on_delete=models.CASCADE)
-    restricao = models.BooleanField(default=False)
-
     def __str__(self):
         return self.nome
 
 
 class Empresa(models.Model):
-    cnpj = models.CharField(max_length=30)
-    nome = models.CharField(max_length=30)
-    senha = models.CharField(max_length=30)
-
-
-class Cardapio(models.Model):
-    nome = models.CharField(max_length=30)
-    descricao = models.CharField(max_length=30)
-    data = models.DateField()
+    cnpj = models.CharField(max_length=18)
+    nome = models.CharField(max_length=255)
+    senha = models.CharField(max_length=255)
 
 
 class Pedido(models.Model):
     pessoa = models.ManyToManyField(Aluno)
+    pedido = models.ManyToManyField(Cardapio)
     restricao = models.BooleanField(default=False)
     data = models.DateField()
